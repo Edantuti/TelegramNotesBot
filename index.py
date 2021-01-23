@@ -7,21 +7,18 @@ updater = Updater(environ.get("TOKEN"), use_context=True)
 name = ""
 
 dispatcher: Dispatcher = updater.dispatcher
-print("hello")
+
 def receive(update:Update,context: CallbackContext):
     global name
-    print('Hello')
-    print(update.message.document.file_id)
-    print(update.message.document.file_name)
+    
     file = bot.getFile(update.message.document.file_id)
     import time
     time.sleep(5)
     name = update.message.document.file_name
-    print(name)
+  
     file.download(name)
-    print(name)
+
     time.sleep(10)
-    print(name)
     upload_notes(name)
     move_files()
     bot.send_message(
