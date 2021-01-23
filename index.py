@@ -1,9 +1,9 @@
 from telegram import *
 from telegram.ext import *
-from os import remove, path
-bot = Bot("1470300816:AAFjp7MxcFCVUdCzZ_k-1lNwpB1VP4fM9tI")
+from os import remove, path, environ
+bot = Bot(environ.get("TOKEN"))
 
-updater = Updater("1470300816:AAFjp7MxcFCVUdCzZ_k-1lNwpB1VP4fM9tI", use_context=True)
+updater = Updater(environ.get("TOKEN"), use_context=True)
 name = ""
 
 dispatcher: Dispatcher = updater.dispatcher
