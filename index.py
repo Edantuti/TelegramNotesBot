@@ -4,10 +4,9 @@ from os import remove, environ
 import time
 from drive import upload_notes
 
+bot = Bot(token=environ.get("TOKEN"))
 
-bot = Bot(token=environ.get('TOKEN'))
-
-updater = Updater(environ.get('TOKEN'), use_context=True)
+updater = Updater(environ.get("TOKEN"), use_context=True)
 
 dispatcher = updater.dispatcher
 
@@ -16,6 +15,7 @@ list_of_subject={
     "Chemistry": "1x_vj-5G7DxAHeVlMOoIfNRogK3kom3Fq",
     "Physics": "1xboUnEtB8sZkLU3YzmLPT9thnomKs6bC",
     "IPE": "1-4m4Xp43UwecwvpLJrGLbgZxucX_orJL",
+    "Timetable and Important files":"17qQqmLrrXIPRt5DyYQUeVtm1deZMM-N_"
 }
 
 folder_id = ""
@@ -48,6 +48,7 @@ def folderSelector(update, context):
             InlineKeyboardButton("Chemistry", callback_data="Chemistry"),
             InlineKeyboardButton("IPE", callback_data="IPE"),
         ],
+        [InlineKeyboardButton("Timetable and Important files", callback_data="Timetable and Important files")]
     ]
 
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -70,13 +71,13 @@ def upload(update:Update, context:CallbackContext):
         file = bot.getFile(update.message.document.file_id)
         file.download(name)
         time.sleep(5)
+        upload_notes(name, folder_id)
+        delete_files(name)
         bot.sendMessage(
             chat_id=update.effective_chat.id,
             text="Done uploading",
             parse_mode=ParseMode.HTML
         )
-        upload_notes(name, folder_id)
-        delete_files(name)
 
     except(AttributeError, TypeError):
         name = update.message.photo[2].file_id + ".jpg"
