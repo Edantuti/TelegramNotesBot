@@ -6,4 +6,4 @@ This is the bot which allowed my friends to upload the files to the google drive
 [pydrive](https://pythonhosted.org/PyDrive/),
 
 ###Social links
-[insta](www.instagram.com/edantuti)
+[insta](https://www.instagram.com/edantuti)
