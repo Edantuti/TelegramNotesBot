@@ -35,6 +35,7 @@ def move_files():
       remove(name)
 
 dispatcher.add_handler(MessageHandler(Filters.document, receive))
+dispatcher.add_handler(MessageHandler(Filters.photo, receive))
 updater.start_polling()
 
 from pydrive.drive import GoogleDrive
