@@ -6,6 +6,8 @@ bot = Bot(environ.get("TOKEN"))
 updater = Updater(environ.get("TOKEN"), use_context=True)
 name = ""
 
+print('hello')
+
 dispatcher: Dispatcher = updater.dispatcher
 
 def receive(update:Update,context: CallbackContext):
