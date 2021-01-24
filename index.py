@@ -29,13 +29,32 @@ def receive(update:Update,context: CallbackContext):
       parse_mode = ParseMode.HTML
     )
 
+
+def receive_photo(update: Update, context: CallbackContext):
+    global name
+
+    file = bot.getFile(update.message.photo[1].file_id)
+    import time
+    time.sleep(5)
+    name = update.message.document.file_name
+    file.download(name)
+
+    time.sleep(10)
+    upload_notes(name)
+    move_files()
+    bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="Done uploading",
+        parse_mode=ParseMode.HTML
+    )
+
 def move_files():
     global name
     if path.exists(name):
       remove(name)
 
 dispatcher.add_handler(MessageHandler(Filters.document, receive))
-dispatcher.add_handler(MessageHandler(Filters.photo, receive))
+dispatcher.add_handler(MessageHandler(Filters.photo, receive_photo))
 updater.start_polling()
 
 from pydrive.drive import GoogleDrive
