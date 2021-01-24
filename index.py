@@ -36,7 +36,7 @@ def receive_photo(update: Update, context: CallbackContext):
     file = bot.getFile(update.message.photo[1].file_id)
     import time
     time.sleep(5)
-    name = update.message.document.file_name
+    name = update.message.photo[1].file_id
     file.download(name)
 
     time.sleep(10)
