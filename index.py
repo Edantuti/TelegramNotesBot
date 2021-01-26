@@ -2,7 +2,7 @@ from telegram import *
 from telegram.ext import *
 from os import remove, environ
 import time
-from drive import upload_notes
+from drive import *
 from json import load
 
 bot = Bot(environ.get('TOKEN'))
@@ -32,7 +32,7 @@ def error(update, context):
 def folderSelector(update, context):
     keyboard = [[InlineKeyboardButton(i, callback_data=i)] for i in folder_list]
     reply_markup = InlineKeyboardMarkup(keyboard)
-    update.message.reply_text("Start Handler, Choose a route:", reply_markup=reply_markup)
+    update.message.reply_text("Choose the Folder: ", reply_markup=reply_markup)
     return FIRST
 
 def folder(update, context):
@@ -42,7 +42,7 @@ def folder(update, context):
     if file_json[query.data]['title']:
         keyboard = [[InlineKeyboardButton(file_json[query.data]['title'][i], callback_data=file_json[query.data]['id'][i])] for i in range(len(file_json[query.data]['title']))]
     else:
-        query.edit_message_text(text=f"The option you selected:{query.data}")
+        query.edit_message_text(text=f"Thank you for selecting the option.")
         option_id = file_json[query.data]['fid']
         return ConversationHandler.END
     reply_markup = InlineKeyboardMarkup(keyboard)
