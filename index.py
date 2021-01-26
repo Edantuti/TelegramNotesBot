@@ -41,6 +41,7 @@ def update_json(update, context):
 
 def folder_selector(update, context):
     keyboard = [[InlineKeyboardButton(i, callback_data=i)] for i in folder_list]
+    keyboard[0].append(InlineKeyboardButton('U+274E', callback_data=None))
     reply_markup = InlineKeyboardMarkup(keyboard)
     update.message.reply_text("Choose the Folder: ", reply_markup=reply_markup)
     return FIRST
@@ -54,6 +55,7 @@ def folder(update, context):
         keyboard = [
             [InlineKeyboardButton(file_json[query.data]['title'][i], callback_data=file_json[query.data]['id'][i])] for
             i in range(len(file_json[query.data]['title']))]
+        keyboard[0].append(InlineKeyboardButton('U+274E', callback_data=None))
     else:
         query.edit_message_text(text=f"Thank you for selecting the option.")
         option_id = file_json[query.data]['fid']
