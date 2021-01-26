@@ -3,25 +3,21 @@ from telegram.ext import *
 from os import remove, environ
 import time
 from drive import upload_notes
+from json import load
 
-bot = Bot(token=environ.get("TOKEN"))
+bot = Bot('1510119990:AAHtBtwdj2yozGsTuMTRvQZszrmQecBxdzA')
 
-updater = Updater(environ.get("TOKEN"), use_context=True)
+updater = Updater('1510119990:AAHtBtwdj2yozGsTuMTRvQZszrmQecBxdzA', use_context=True)
 
 dispatcher = updater.dispatcher
 
-list_of_subject={
-    "Mathematics": "1xmuRL0aA-Eq5V0ajZKvv-Pmp9IU1l7sq",
-    "Chemistry": "1x_vj-5G7DxAHeVlMOoIfNRogK3kom3Fq",
-    "Physics": "1xboUnEtB8sZkLU3YzmLPT9thnomKs6bC",
-    "IPE": "1-4m4Xp43UwecwvpLJrGLbgZxucX_orJL",
-    "Timetable and Important files":"17qQqmLrrXIPRt5DyYQUeVtm1deZMM-N_"
-}
+file_json = load(open('file.json'))
+option_id = ""
+option_folder = ""
 
-folder_id = ""
+folder_list = file_json['flist']
 
-def error(update, context):
-    print(context.error)
+FIRST, SECOND = range(2)
 
 def start(update, context):
     update.message.reply_text('Hi!')
@@ -29,36 +25,41 @@ def start(update, context):
 def delete_files(name_file):
     remove(name_file)
 
-def button(update: Update, context:CallbackContext):
-    global folder_id
-    query = update.callback_query
-    query.answer()
-    query.edit_message_text(text=f"Selected option: {query.data}")
-    folder_id = list_of_subject[query.data]
+def error(update, context):
+    print(context.error)
 
-#query selector
 
 def folderSelector(update, context):
-    keyboard = [
-        [
-            InlineKeyboardButton("Mathematics", callback_data="Mathematics"),
-            InlineKeyboardButton("Physics", callback_data="Physics"),
-        ],
-        [
-            InlineKeyboardButton("Chemistry", callback_data="Chemistry"),
-            InlineKeyboardButton("IPE", callback_data="IPE"),
-        ],
-        [InlineKeyboardButton("Timetable and Important files", callback_data="Timetable and Important files")]
-    ]
-
+    keyboard = [[InlineKeyboardButton(i, callback_data=i)] for i in folder_list]
     reply_markup = InlineKeyboardMarkup(keyboard)
-    update.message.reply_text("Please choose: ", reply_markup=reply_markup)
+    update.message.reply_text("Start Handler, Choose a route:", reply_markup=reply_markup)
+    return FIRST
 
-#upload function
+def folder(update, context):
+    global option_id
+    query = update.callback_query
+    query.answer()
+    if file_json[query.data]['title']:
+        keyboard = [[InlineKeyboardButton(file_json[query.data]['title'][i], callback_data=file_json[query.data]['id'][i])] for i in range(len(file_json[query.data]['title']))]
+    else:
+        query.edit_message_text(text=f"The option you selected:{query.data}")
+        option_id = file_json[query.data]['fid']
+        return ConversationHandler.END
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(text=f"The option you selected: {query.data}", reply_markup=reply_markup)
+    return SECOND
+
+def idSelector(update, context):
+    global option_id
+    query = update.callback_query
+    query.answer()
+    option_id = query.data
+    query.edit_message_text(text=f"Thank you for selecting the option.")
+    return ConversationHandler.END
 
 def upload(update:Update, context:CallbackContext):
-    global folder_id
-    if(folder_id == ""):
+    global option_id
+    if(option_id == ""):
         bot.sendMessage(
             chat_id=update.effective_chat.id,
             text="Please select a particular folder and send then photo.",
@@ -71,7 +72,7 @@ def upload(update:Update, context:CallbackContext):
         file = bot.getFile(update.message.document.file_id)
         file.download(name)
         time.sleep(5)
-        upload_notes(name, folder_id)
+        upload_notes(name, option_id)
         delete_files(name)
         bot.sendMessage(
             chat_id=update.effective_chat.id,
@@ -84,7 +85,7 @@ def upload(update:Update, context:CallbackContext):
         file = bot.getFile(update.message.photo[2].file_id)
         file.download(name)
         time.sleep(5)
-        upload_notes(name, folder_id)
+        upload_notes(name, option_id)
         delete_files(name)
         bot.sendMessage(
             chat_id=update.effective_chat.id,
@@ -92,13 +93,27 @@ def upload(update:Update, context:CallbackContext):
             parse_mode= ParseMode.HTML,
         )
 
-#Handler for variety
-dispatcher.add_handler(CommandHandler("start", start)) #To check whether the bot is online
-dispatcher.add_handler(CommandHandler("select", folderSelector)) #To Select the folder
-dispatcher.add_handler(MessageHandler(Filters.document, upload))#To upload the document
-dispatcher.add_handler(MessageHandler(Filters.photo, upload))#to upload the photo
-dispatcher.add_handler(CallbackQueryHandler(button))#query selector handler
-dispatcher.add_error_handler(error)#error handler
+
+conv_handler = ConversationHandler(
+    entry_points=[CommandHandler('upload', folderSelector)],
+    states={
+        FIRST: [
+            CallbackQueryHandler(folder),
+        ],
+        SECOND: [
+            CallbackQueryHandler(idSelector)
+        ]
+    },
+    fallbacks=[CommandHandler('upload', folderSelector)],
+    per_message=False
+)
+
+dispatcher.add_handler(CommandHandler('start', start))
+dispatcher.add_handler(MessageHandler(Filters.document, upload))
+dispatcher.add_handler(MessageHandler(Filters.photo, upload))
+dispatcher.add_handler(conv_handler)
+
 
 updater.start_polling()
 updater.idle()
+

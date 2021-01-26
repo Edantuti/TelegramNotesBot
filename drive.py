@@ -1,5 +1,26 @@
 from pydrive.drive import GoogleDrive
 from pydrive.auth import GoogleAuth
+from json import dump
+import threading
+collector = {
+    "fid": "1xWGrreIOa69FpCXl0Z4fTIJzJ3dheik-",
+    "flist": [],
+    "Mathematics": {
+        "fid": ""
+    },
+    "Chemistry": {
+        "fid": ""
+    },
+    "Physics": {
+        "fid": ""
+    },
+    "IPE": {
+        "fid": ""
+    }
+}
+list_folder = []
+temp = []
+list_subjects = []
 
 auth = GoogleAuth()
 
@@ -18,8 +39,66 @@ auth.SaveCredentialsFile('creds.txt')
 
 drive = GoogleDrive(auth)
 
+def ListFolder(parent):
+    filelist = []
+    file_list = drive.ListFile({
+        'q':
+        "'%s' in parents and trashed=false" % parent
+    }).GetList()
+    for f in file_list:
+        if f['mimeType'] == 'application/vnd.google-apps.folder':  # if folder
+            filelist.append({
+                "id": f['id'],
+                "title": f['title'],
+            })
+    return filelist
+
+def reset():
+    for file in ListFolder(collector["fid"]):
+        list_folder.append(file['title'])
+        temp.append({
+            "id": file['id'],
+            "title": file['title'],
+        })
+
+def create_json():
+    global tmp
+    for i in temp:
+        for y in collector:
+          if y == i['title']:
+            collector["flist"].append(i['title'])
+
+    for i in temp:
+        for j in collector:
+            if i['title'] == j:
+                collector[j]['fid'] = i['id']
+                list_subjects.append(i['title'])
+
+    for i in list_subjects:
+        tmp = []
+        for j in ListFolder(collector[i]['fid']):
+          tmp.append(j)
+        collector[i]['title'] = []
+        collector[i]['id'] = []
+        for k in tmp:
+            collector[i]['title'].append(k['title'])
+            collector[i]['id'].append(k['id'])
+
+    with open('file_id.json', 'w') as write_file:
+        dump(collector, write_file)
+
+def timer(function, time):
+    def func_wrapper():
+        timer(function, time)
+    t = threading.Timer(time, func_wrapper)
+    t.start()
+    return t
+
 def upload_notes(name_file, id):
     file = drive.CreateFile({'parents': [{'id': id}]})
     file.SetContentFile(name_file)
     file.Upload()
 
+
+timer(reset, 5)
+timer(create_json, 5)
