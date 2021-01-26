@@ -13,38 +13,47 @@ dispatcher = updater.dispatcher
 
 file_json = load(open('file.json'))
 option_id = ""
-option_folder = ""
 
 folder_list = file_json['flist']
 
 FIRST, SECOND = range(2)
 
-def start(update, context):
+
+def start(update):
     update.message.reply_text('Hi!')
+
 
 def delete_files(name_file):
     remove(name_file)
 
-def error(update, context):
+
+def error(context):
     print(context.error)
 
-def updateJSON(update, context):
+
+def update_json(update):
+    global option_id
+    option_id = ""
     reset()
     create_json()
     update.message.reply_text("Done!")
 
-def folderSelector(update, context):
+
+def folder_selector(update):
     keyboard = [[InlineKeyboardButton(i, callback_data=i)] for i in folder_list]
     reply_markup = InlineKeyboardMarkup(keyboard)
     update.message.reply_text("Choose the Folder: ", reply_markup=reply_markup)
     return FIRST
 
-def folder(update, context):
+
+def folder(update):
     global option_id
     query = update.callback_query
     query.answer()
     if file_json[query.data]['title']:
-        keyboard = [[InlineKeyboardButton(file_json[query.data]['title'][i], callback_data=file_json[query.data]['id'][i])] for i in range(len(file_json[query.data]['title']))]
+        keyboard = [
+            [InlineKeyboardButton(file_json[query.data]['title'][i], callback_data=file_json[query.data]['id'][i])] for
+            i in range(len(file_json[query.data]['title']))]
     else:
         query.edit_message_text(text=f"Thank you for selecting the option.")
         option_id = file_json[query.data]['fid']
@@ -53,7 +62,8 @@ def folder(update, context):
     query.edit_message_text(text=f"The option you selected: {query.data}", reply_markup=reply_markup)
     return SECOND
 
-def idSelector(update, context):
+
+def id_selector(update):
     global option_id
     query = update.callback_query
     query.answer()
@@ -61,9 +71,10 @@ def idSelector(update, context):
     query.edit_message_text(text=f"Thank you for selecting the option.")
     return ConversationHandler.END
 
-def upload(update:Update, context:CallbackContext):
+
+def upload(update: Update):
     global option_id
-    if(option_id == ""):
+    if option_id == "":
         bot.sendMessage(
             chat_id=update.effective_chat.id,
             text="Please select a particular folder and send then photo.",
@@ -93,32 +104,30 @@ def upload(update:Update, context:CallbackContext):
         delete_files(name)
         bot.sendMessage(
             chat_id=update.effective_chat.id,
-            text = "Done uploading",
-            parse_mode= ParseMode.HTML,
+            text="Done uploading",
+            parse_mode=ParseMode.HTML,
         )
 
 
 conv_handler = ConversationHandler(
-    entry_points=[CommandHandler('upload', folderSelector)],
+    entry_points=[CommandHandler('upload', folder_selector)],
     states={
         FIRST: [
             CallbackQueryHandler(folder),
         ],
         SECOND: [
-            CallbackQueryHandler(idSelector)
+            CallbackQueryHandler(id_selector)
         ]
     },
-    fallbacks=[CommandHandler('upload', folderSelector)],
+    fallbacks=[CommandHandler('upload', folder_selector)],
     per_message=False
 )
 
 dispatcher.add_handler(CommandHandler('start', start))
-dispatcher.add_handler(CommandHandler('update', updateJSON))
+dispatcher.add_handler(CommandHandler('update', update_json))
 dispatcher.add_handler(MessageHandler(Filters.document, upload))
 dispatcher.add_handler(MessageHandler(Filters.photo, upload))
 dispatcher.add_handler(conv_handler)
 
-
 updater.start_polling()
 updater.idle()
-
