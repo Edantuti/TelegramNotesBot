@@ -15,6 +15,12 @@ collector = {
     },
     "IPE": {
         "fid": ""
+    },
+    "Timetable": {
+        "fid": ""
+    },
+    "Screenshots to be sorted": {
+        "fid": ""
     }
 }
 list_folder = []
