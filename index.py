@@ -28,6 +28,10 @@ def delete_files(name_file):
 def error(update, context):
     print(context.error)
 
+def updateJSON(update, context):
+    reset()
+    create_json()
+    update.message.reply_text("Done!")
 
 def folderSelector(update, context):
     keyboard = [[InlineKeyboardButton(i, callback_data=i)] for i in folder_list]
@@ -109,6 +113,7 @@ conv_handler = ConversationHandler(
 )
 
 dispatcher.add_handler(CommandHandler('start', start))
+dispatcher.add_handler(CommandHandler('update', updateJSON))
 dispatcher.add_handler(MessageHandler(Filters.document, upload))
 dispatcher.add_handler(MessageHandler(Filters.photo, upload))
 dispatcher.add_handler(conv_handler)

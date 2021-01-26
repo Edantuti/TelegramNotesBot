@@ -87,18 +87,9 @@ def create_json():
     with open('file_id.json', 'w') as write_file:
         dump(collector, write_file)
 
-def timer(function, time):
-    def func_wrapper():
-        timer(function, time)
-    t = threading.Timer(time, func_wrapper)
-    t.start()
-    return t
 
 def upload_notes(name_file, id):
     file = drive.CreateFile({'parents': [{'id': id}]})
     file.SetContentFile(name_file)
     file.Upload()
 
-
-timer(reset, 5)
-timer(create_json, 5)
