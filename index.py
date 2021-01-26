@@ -77,7 +77,7 @@ def upload(update: Update, context: CallbackContext):
     if option_id == "":
         bot.sendMessage(
             chat_id=update.effective_chat.id,
-            text="Please select a particular folder and send then photo.",
+            text="Please select a particular folder and then send the photo.",
             parse_mode=ParseMode.HTML
         )
         return None
