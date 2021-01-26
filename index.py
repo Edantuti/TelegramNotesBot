@@ -1,13 +1,14 @@
 from telegram import *
 from telegram.ext import *
 from os import remove, environ
+import emoji
 import time
 from drive import *
 from json import load
 
-bot = Bot(environ.get("TOKEN"))
+bot = Bot(environ.get('TOKEN'))
 
-updater = Updater(environ.get("TOKEN"), use_context=True)
+updater = Updater(environ.get('TOKEN'), use_context=True)
 
 dispatcher = updater.dispatcher
 
@@ -15,6 +16,9 @@ file_json = load(open('file.json'))
 option_id = ""
 
 folder_list = file_json['flist']
+
+end = emoji.emojize(':no_entry:')
+thumbs_emoji = emoji.emojize(':thumbs_up:')
 
 FIRST, SECOND = range(2)
 
@@ -38,26 +42,29 @@ def update_json(update, context):
     create_json()
     update.message.reply_text("Done!")
 
-
 def folder_selector(update, context):
+
     keyboard = [[InlineKeyboardButton(i, callback_data=i)] for i in folder_list]
-    keyboard[0].append(InlineKeyboardButton('U+274E', callback_data=None))
+    keyboard[len(keyboard)-1].append(InlineKeyboardButton(end, callback_data="exit"))
     reply_markup = InlineKeyboardMarkup(keyboard)
     update.message.reply_text("Choose the Folder: ", reply_markup=reply_markup)
     return FIRST
 
 
 def folder(update, context):
-    global option_id
+    global option_id, end
     query = update.callback_query
     query.answer()
+    if query.data == 'exit':
+        query.edit_message_text(text=f"Thank you for selecting the option. {thumbs_emoji}")
+        return ConversationHandler.END
     if file_json[query.data]['title']:
         keyboard = [
             [InlineKeyboardButton(file_json[query.data]['title'][i], callback_data=file_json[query.data]['id'][i])] for
             i in range(len(file_json[query.data]['title']))]
-        keyboard[0].append(InlineKeyboardButton('U+274E', callback_data=None))
+        keyboard[len(keyboard)-1].append(InlineKeyboardButton(end, callback_data="exit"))
     else:
-        query.edit_message_text(text=f"Thank you for selecting the option.")
+        query.edit_message_text(text=f"Thank you for selecting the option. {thumbs_emoji}")
         option_id = file_json[query.data]['fid']
         return ConversationHandler.END
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -69,8 +76,12 @@ def id_selector(update, context):
     global option_id
     query = update.callback_query
     query.answer()
+    if query.data == 'exit':
+        option_id = ""
+        query.edit_message_text(text=f"Thank you for selecting the option. {thumbs_emoji}")
+        return ConversationHandler.END
     option_id = query.data
-    query.edit_message_text(text=f"Thank you for selecting the option.")
+    query.edit_message_text(text=f"Thank you for selecting the option. {thumbs_emoji}")
     return ConversationHandler.END
 
 
@@ -79,7 +90,7 @@ def upload(update: Update, context: CallbackContext):
     if option_id == "":
         bot.sendMessage(
             chat_id=update.effective_chat.id,
-            text="Please select a particular folder and then send the photo.",
+            text="Please select a particular folder and then send the photo. ",
             parse_mode=ParseMode.HTML
         )
         return None
