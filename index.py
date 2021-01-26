@@ -5,9 +5,9 @@ import time
 from drive import *
 from json import load
 
-bot = Bot(environ.get('TOKEN'))
+bot = Bot("1510119990:AAHtBtwdj2yozGsTuMTRvQZszrmQecBxdzA")
 
-updater = Updater(environ.get('TOKEN'), use_context=True)
+updater = Updater("1510119990:AAHtBtwdj2yozGsTuMTRvQZszrmQecBxdzA", use_context=True)
 
 dispatcher = updater.dispatcher
 
@@ -19,7 +19,7 @@ folder_list = file_json['flist']
 FIRST, SECOND = range(2)
 
 
-def start(update):
+def start(update, context):
     update.message.reply_text('Hi!')
 
 
@@ -27,11 +27,11 @@ def delete_files(name_file):
     remove(name_file)
 
 
-def error(context):
+def error(update, context):
     print(context.error)
 
 
-def update_json(update):
+def update_json(update, context):
     global option_id
     option_id = ""
     reset()
@@ -39,14 +39,14 @@ def update_json(update):
     update.message.reply_text("Done!")
 
 
-def folder_selector(update):
+def folder_selector(update, context):
     keyboard = [[InlineKeyboardButton(i, callback_data=i)] for i in folder_list]
     reply_markup = InlineKeyboardMarkup(keyboard)
     update.message.reply_text("Choose the Folder: ", reply_markup=reply_markup)
     return FIRST
 
 
-def folder(update):
+def folder(update, context):
     global option_id
     query = update.callback_query
     query.answer()
@@ -63,7 +63,7 @@ def folder(update):
     return SECOND
 
 
-def id_selector(update):
+def id_selector(update, context):
     global option_id
     query = update.callback_query
     query.answer()
@@ -72,7 +72,7 @@ def id_selector(update):
     return ConversationHandler.END
 
 
-def upload(update: Update):
+def upload(update: Update, context: CallbackContext):
     global option_id
     if option_id == "":
         bot.sendMessage(
