@@ -67,9 +67,9 @@ def folder(update, context):
             i in range(len(file_json[query.data]['title']))]
         keyboard[len(keyboard)-1].append(InlineKeyboardButton(end, callback_data="exit"))
     elif query.data != 'exit':
-        folder_id = query.data
+        folder_id = file_json[query.data]['fid']
     else:
-        query.edit_message_text(text=f"Thank you for selecting the option.{query.data} {thumbs_emoji}")
+        query.edit_message_text(text=f"Thank you for selecting the option. {thumbs_emoji}")
         option_id = file_json[query.data]['fid']
         return ConversationHandler.END
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -82,8 +82,8 @@ def id_selector(update, context):
     query = update.callback_query
     query.answer()
     if query.data == 'exit':
-        option_id = file_json[folder_id]['fid']
-        query.edit_message_text(text=f"Thank you for selecting the option.{folder_id} {thumbs_emoji}")
+        option_id = folder_id
+        query.edit_message_text(text=f"Thank you for selecting the option. {thumbs_emoji}")
         return ConversationHandler.END
     option_id = query.data
     query.edit_message_text(text=f"Thank you for selecting the option. {thumbs_emoji}")
