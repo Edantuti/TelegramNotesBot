@@ -113,17 +113,30 @@ def upload(update: Update, context: CallbackContext):
         )
 
     except(AttributeError, TypeError):
-        name = update.message.photo[2].file_id + ".jpg"
-        file = bot.getFile(update.message.photo[2].file_id)
-        file.download(name)
-        time.sleep(5)
-        upload_notes(name, option_id)
-        delete_files(name)
-        bot.sendMessage(
-            chat_id=update.effective_chat.id,
-            text="Done uploading",
-            parse_mode=ParseMode.HTML,
-        )
+        try:
+            name = update.message.photo[2].file_id + ".jpg"
+            file = bot.getFile(update.message.photo[2].file_id)
+            file.download(name)
+            time.sleep(5)
+            upload_notes(name, option_id)
+            delete_files(name)
+            bot.sendMessage(
+                chat_id=update.effective_chat.id,
+                text="Done uploading",
+                parse_mode=ParseMode.HTML,
+            )
+        except(IndexError):
+            name = update.message.photo[0].file_id + ".jpg"
+            file = bot.getFile(update.message.photo[0].file_id)
+            file.download(name)
+            time.sleep(5)
+            upload_notes(name, option_id)
+            delete_files(name)
+            bot.sendMessage(
+                chat_id=update.effective_chat.id,
+                text="Done uploading",
+                parse_mode=ParseMode.HTML,
+            )
 
 
 conv_handler = ConversationHandler(
