@@ -70,8 +70,8 @@ def create_json():
     global tmp
     for i in temp:
         for y in collector:
-          if y == i['title']:
-            collector["flist"].append(i['title'])
+            if y == i['title']:
+                collector["flist"].append(i['title'])
 
     for i in temp:
         for j in collector:
