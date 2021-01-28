@@ -68,7 +68,7 @@ def reset():
         })
 
 def create_json():
-    global tmp
+    global tmp, folder_temp_list
     for i in temp:
         for y in collector:
             if y == i['title']:
@@ -77,6 +77,8 @@ def create_json():
     if folder_temp_list != collector['flist']:
         for item in folder_temp_list:
             collector['flist'].append(item)
+    else:
+        folder_temp_list = []
 
     for i in temp:
         for j in collector:
