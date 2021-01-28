@@ -6,9 +6,9 @@ import time
 from drive import *
 from json import load
 
-bot = Bot("1510119990:AAHtBtwdj2yozGsTuMTRvQZszrmQecBxdzA")
+bot = Bot(environ.get('TOKEN'))
 
-updater = Updater("1510119990:AAHtBtwdj2yozGsTuMTRvQZszrmQecBxdzA", use_context=True)
+updater = Updater(environ.get('TOKEN'), use_context=True)
 
 dispatcher = updater.dispatcher
 
