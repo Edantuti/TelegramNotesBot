@@ -26,6 +26,7 @@ collector = {
 list_folder = []
 temp = []
 list_subjects = []
+folder_temp_list = []
 
 auth = GoogleAuth()
 
@@ -71,10 +72,11 @@ def create_json():
     for i in temp:
         for y in collector:
             if y == i['title']:
-                if not collector["flist"]:
-                    collector["flist"].append(i['title'])
-                else:
-                    pass
+                folder_temp_list.append(i['title'])
+
+    if folder_temp_list != collector['flist']:
+        for item in folder_temp_list:
+            collector['flist'].append(item)
 
     for i in temp:
         for j in collector:
