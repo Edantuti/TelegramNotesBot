@@ -4,15 +4,19 @@ from os import remove, environ
 import emoji
 import time
 from drive import *
-from json import load
+from json import *
 
 bot = Bot(environ.get('TOKEN'))
 
 updater = Updater(environ.get('TOKEN'), use_context=True)
 
 dispatcher = updater.dispatcher
-
-file_json = load(open('file.json'))
+try:
+    file_json = load(open('file.json'))
+except(FileNotFoundError):
+    create_json()
+    time.sleep(20)
+    file_json = load(open('file.json'))
 option_id = ""
 
 folder_id = ""
@@ -42,6 +46,7 @@ def update_json(update, context):
     option_id = ""
     reset()
     create_json()
+    time.sleep(5)
     file_json = load(open('file.json'))
     update.message.reply_text("Done!")
 

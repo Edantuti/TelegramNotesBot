@@ -74,11 +74,13 @@ def create_json():
             if y == i['title']:
                 folder_temp_list.append(i['title'])
 
-    if folder_temp_list != collector['flist']:
+    if not collector['flist']:
         for item in folder_temp_list:
             collector['flist'].append(item)
-    else:
+    if collector['flist'] == folder_temp_list:
         folder_temp_list = []
+    else:
+        collector['flist'].append(folder_temp_list[len(folder_temp_list)]-1)
 
     for i in temp:
         for j in collector:
@@ -98,6 +100,7 @@ def create_json():
 
     with open('file.json', 'w') as write_file:
         dump(collector, write_file)
+    print('done')
 
 
 def upload_notes(name_file, id):
