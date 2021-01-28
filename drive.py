@@ -78,8 +78,7 @@ def create_json():
         for item in folder_temp_list:
             collector['flist'].append(item)
     if collector['flist'] != folder_temp_list:
-        collector['flist'].append(folder_temp_list[len(folder_temp_list)]-1)
-        folder_temp_list = []
+        collector['flist'] = folder_temp_list
 
     for i in temp:
         for j in collector:
