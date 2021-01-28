@@ -71,7 +71,10 @@ def create_json():
     for i in temp:
         for y in collector:
             if y == i['title']:
-                collector["flist"].append(i['title'])
+                if not collector["flist"]:
+                    collector["flist"].append(i['title'])
+                else:
+                    pass
 
     for i in temp:
         for j in collector:
