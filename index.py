@@ -6,9 +6,9 @@ import time
 from drive import *
 from json import load
 
-bot = Bot(environ.get("TOKEN"))
+bot = Bot(environ.get('TOKEN'))
 
-updater = Updater(environ.get("TOKEN"), use_context=True)
+updater = Updater(environ.get('TOKEN'), use_context=True)
 
 dispatcher = updater.dispatcher
 
@@ -58,7 +58,7 @@ def folder(update, context):
     query = update.callback_query
     query.answer()
     if query.data == 'exit':
-        option_id = ""
+        option_id = file_json['fid']
         query.edit_message_text(text=f"Thank you for selecting the option. {thumbs_emoji}")
         return ConversationHandler.END
     elif file_json[query.data]['title']:
