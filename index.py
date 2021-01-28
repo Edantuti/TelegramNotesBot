@@ -14,7 +14,7 @@ updater = Updater(environ.get('TOKEN'), use_context=True)
 dispatcher = updater.dispatcher
 try:
     file_json = load(open('file.json'))
-except(FileNotFoundError):
+except(FileNotFoundError, JSONDecodeError):
     create_json()
     time.sleep(20)
     file_json = load(open('file.json'))
