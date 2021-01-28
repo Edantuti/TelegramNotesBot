@@ -107,3 +107,6 @@ def upload_notes(name_file, id):
     file.SetContentFile(name_file)
     file.Upload()
 
+reset()
+create_json()
+
