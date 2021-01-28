@@ -2,6 +2,7 @@ from pydrive.drive import GoogleDrive
 from pydrive.auth import GoogleAuth
 from json import dump
 collector = {
+    "name": "Aakash notes",
     "fid": "1xWGrreIOa69FpCXl0Z4fTIJzJ3dheik-",
     "flist": [],
     "Mathematics": {

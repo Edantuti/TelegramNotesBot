@@ -3,6 +3,7 @@ from telegram.ext import *
 from os import remove, environ
 import emoji
 import time
+from datetime import date
 from drive import *
 from json import *
 
@@ -18,7 +19,7 @@ except(FileNotFoundError):
     time.sleep(20)
     file_json = load(open('file.json'))
 option_id = ""
-
+name_folder = ""
 folder_id = ""
 
 folder_list = file_json['flist']
@@ -60,15 +61,17 @@ def folder_selector(update, context):
 
 
 def folder(update, context):
-    global option_id, end, folder_id
+    global option_id, end, folder_id, name_folder
     query = update.callback_query
     query.answer()
     if query.data == 'exit':
+        name_folder = file_json['name']
         option_id = file_json['fid']
         query.edit_message_text(text=f"Thank you for selecting the option. {thumbs_emoji}")
         return ConversationHandler.END
     elif file_json[query.data]['title']:
         folder_id = file_json[query.data]['fid']
+        name_folder = query.data
         keyboard = [
             [InlineKeyboardButton(file_json[query.data]['title'][i], callback_data=file_json[query.data]['id'][i])] for
             i in range(len(file_json[query.data]['title']))]
@@ -120,7 +123,7 @@ def upload(update: Update, context: CallbackContext):
 
     except(AttributeError, TypeError):
         try:
-            name = update.message.photo[2].file_id + ".jpg"
+            name = name_folder+" "+str(date.today()) + ".jpg"
             file = bot.getFile(update.message.photo[2].file_id)
             file.download(name)
             time.sleep(5)
@@ -132,7 +135,7 @@ def upload(update: Update, context: CallbackContext):
                 parse_mode=ParseMode.HTML,
             )
         except(IndexError):
-            name = update.message.photo[0].file_id + ".jpg"
+            name = name_folder+" "+str(date.today()) + ".jpg"
             file = bot.getFile(update.message.photo[0].file_id)
             file.download(name)
             time.sleep(5)
