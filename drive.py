@@ -89,7 +89,7 @@ def create_json():
             collector[i]['title'].append(k['title'])
             collector[i]['id'].append(k['id'])
 
-    with open('file_id.json', 'w') as write_file:
+    with open('file.json', 'w') as write_file:
         dump(collector, write_file)
 
 

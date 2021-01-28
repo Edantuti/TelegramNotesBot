@@ -6,9 +6,9 @@ import time
 from drive import *
 from json import load
 
-bot = Bot(environ.get('TOKEN'))
+bot = Bot(environ.get("TOKEN"))
 
-updater = Updater(environ.get('TOKEN'), use_context=True)
+updater = Updater(environ.get("TOKEN"), use_context=True)
 
 dispatcher = updater.dispatcher
 
@@ -38,10 +38,11 @@ def error(update, context):
 
 
 def update_json(update, context):
-    global option_id
+    global option_id, file_json
     option_id = ""
     reset()
     create_json()
+    file_json = load(open('file.json'))
     update.message.reply_text("Done!")
 
 def folder_selector(update, context):
