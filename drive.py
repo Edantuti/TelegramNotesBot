@@ -20,6 +20,9 @@ collector = {
     "Timetable": {
         "fid": ""
     },
+    "Ncert eBooks": {
+        "fid":""
+    },
     "Screenshots to be sorted": {
         "fid": ""
     }
