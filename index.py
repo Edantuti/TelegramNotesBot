@@ -109,7 +109,7 @@ def upload(update: Update, context: CallbackContext):
         return None
 
     try:
-        name = update.message.document.file_name
+        name = update.message.document.file_name + update.effective_user.name
         file = bot.getFile(update.message.document.file_id)
         file.download(name)
         time.sleep(5)
@@ -123,7 +123,7 @@ def upload(update: Update, context: CallbackContext):
 
     except(AttributeError, TypeError):
         try:
-            name = name_folder+" "+str(date.today()) + ".jpg"
+            name = update.effective_user.name+" "+name_folder+" "+str(date.today()) + ".jpg"
             file = bot.getFile(update.message.photo[2].file_id)
             file.download(name)
             time.sleep(5)
@@ -135,7 +135,7 @@ def upload(update: Update, context: CallbackContext):
                 parse_mode=ParseMode.HTML,
             )
         except(IndexError):
-            name = name_folder+" "+str(date.today()) + ".jpg"
+            name = update.effective_user.name+" "+name_folder+" "+str(date.today()) + ".jpg"
             file = bot.getFile(update.message.photo[0].file_id)
             file.download(name)
             time.sleep(5)
