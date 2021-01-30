@@ -109,7 +109,7 @@ def upload(update: Update, context: CallbackContext):
         return None
 
     try:
-        name = update.message.document.file_name + update.effective_user.name
+        name = update.message.document.file_name + " " +update.effective_user.name
         file = bot.getFile(update.message.document.file_id)
         file.download(name)
         time.sleep(5)
