@@ -52,7 +52,6 @@ def update_json(update, context):
     update.message.reply_text("Done!")
 
 def folder_selector(update, context):
-
     keyboard = [[InlineKeyboardButton(i, callback_data=i)] for i in folder_list]
     keyboard[len(keyboard)-1].append(InlineKeyboardButton(end, callback_data="exit"))
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -109,7 +108,7 @@ def upload(update: Update, context: CallbackContext):
         return None
 
     try:
-        name = update.message.document.file_name + " " +update.effective_user.name
+        name =update.effective_user.name+" "+update.message.document.file_name
         file = bot.getFile(update.message.document.file_id)
         file.download(name)
         time.sleep(5)
