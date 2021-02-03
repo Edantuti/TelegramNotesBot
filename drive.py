@@ -25,6 +25,9 @@ collector = {
     },
     "Screenshots to be sorted": {
         "fid": ""
+    },
+    "AIATS model papers and other FT papers": {
+        "fid": ""
     }
 }
 list_folder = []
