@@ -111,7 +111,7 @@ def upload(update: Update, context: CallbackContext):
         name =update.effective_user.name+" "+update.message.document.file_name
         file = bot.getFile(update.message.document.file_id)
         file.download(name)
-        time.sleep(5)
+        time.sleep(10)
         upload_notes(name, option_id)
         delete_files(name)
         bot.sendMessage(
