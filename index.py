@@ -1,4 +1,5 @@
 from telegram import *
+from telegram import error as er
 from telegram.ext import *
 from os import remove, environ
 import emoji
@@ -116,10 +117,11 @@ def upload(update: Update, context: CallbackContext):
         delete_files(name)
         bot.sendMessage(
             chat_id=update.effective_chat.id,
-            text="Done uploading",
+            text="Uploading Done!",
             parse_mode=ParseMode.HTML
         )
-
+    except(er.BadRequest):
+        update.message.reply_text("The file size is too big!!. The file size must be less than 20MB.")
     except(AttributeError, TypeError):
         try:
             name = update.effective_user.name+" "+name_folder+" "+str(date.today()) + ".jpg"
@@ -130,7 +132,7 @@ def upload(update: Update, context: CallbackContext):
             delete_files(name)
             bot.sendMessage(
                 chat_id=update.effective_chat.id,
-                text="Done uploading",
+                text="Uploading Done!",
                 parse_mode=ParseMode.HTML,
             )
         except(IndexError):
@@ -142,7 +144,7 @@ def upload(update: Update, context: CallbackContext):
             delete_files(name)
             bot.sendMessage(
                 chat_id=update.effective_chat.id,
-                text="Done uploading",
+                text="Uploading Done!",
                 parse_mode=ParseMode.HTML,
             )
 
