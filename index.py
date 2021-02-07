@@ -7,7 +7,7 @@ import time
 from datetime import date
 from drive import *
 from json import *
-
+link = "https://drive.google.com/drive/u/0/folders/1xWGrreIOa69FpCXl0Z4fTIJzJ3dheik-"
 bot = Bot(environ.get('TOKEN'))
 
 updater = Updater(environ.get('TOKEN'), use_context=True)
@@ -98,6 +98,9 @@ def id_selector(update, context):
     return ConversationHandler.END
 
 
+def send(update:Update, context: CallbackContext):
+    update.message.reply_text(f"{link}")
+
 def upload(update: Update, context: CallbackContext):
     global option_id
     if option_id == "":
@@ -165,6 +168,7 @@ conv_handler = ConversationHandler(
 
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('update', update_json))
+dispatcher.add_handler(CommandHandler('link', send))
 dispatcher.add_handler(MessageHandler(Filters.document, upload))
 dispatcher.add_handler(MessageHandler(Filters.photo, upload))
 dispatcher.add_handler(conv_handler)
