@@ -99,7 +99,11 @@ def id_selector(update, context):
 
 
 def send(update:Update, context: CallbackContext):
-    update.message.reply_text(f"{link}")
+    bot.sendMessage(
+        chat_id= update.effective_chat.id,
+        text=f"<a href={link}>Click the link.</a>",
+        parse_mode=ParseMode.HTML
+    )
 
 def upload(update: Update, context: CallbackContext):
     global option_id
