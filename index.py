@@ -8,8 +8,9 @@ from datetime import date
 from drive import *
 from json import *
 link = "https://drive.google.com/drive/u/0/folders/1xWGrreIOa69FpCXl0Z4fTIJzJ3dheik-"
+github_repo = 
 bot = Bot(environ.get('TOKEN'))
-
+about_object = "This bot is made by YOLO-KUN.<br> Here is the github repo. <a href="
 updater = Updater(environ.get('TOKEN'), use_context=True)
 
 dispatcher = updater.dispatcher
@@ -104,6 +105,12 @@ def send(update:Update, context: CallbackContext):
         text=f"<a href={link}>Click the link.</a>",
         parse_mode=ParseMode.HTML
     )
+
+def about(update: Update, context: CallbackContext):
+    bot.sendMessage(
+
+    )
+
 
 def upload(update: Update, context: CallbackContext):
     global option_id
