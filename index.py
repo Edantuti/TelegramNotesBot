@@ -9,7 +9,7 @@ from drive import *
 from json import *
 link = "https://drive.google.com/drive/u/0/folders/1xWGrreIOa69FpCXl0Z4fTIJzJ3dheik-"
 
-about_object = f"This bot is made by YOLO-KUN.\nHere is the github repo. <a href="+"https://github.com/Edantuti"+">here</a>"
+about_object = "This bot is made by YOLO-KUN. Here is the github repo. <a href="+"https://github.com/Edantuti"+">here</a>"
 bot = Bot(environ.get('TOKEN'))
 updater = Updater(environ.get('TOKEN'), use_context=True)
 
