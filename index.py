@@ -8,9 +8,9 @@ from datetime import date
 from drive import *
 from json import *
 link = "https://drive.google.com/drive/u/0/folders/1xWGrreIOa69FpCXl0Z4fTIJzJ3dheik-"
-github_repo = 
+
+about_object = f"This bot is made by YOLO-KUN.<br> Here is the github repo. <a href="+"https://github.com/Edantuti"+">here</a>"
 bot = Bot(environ.get('TOKEN'))
-about_object = "This bot is made by YOLO-KUN.<br> Here is the github repo. <a href="
 updater = Updater(environ.get('TOKEN'), use_context=True)
 
 dispatcher = updater.dispatcher
@@ -99,7 +99,7 @@ def id_selector(update, context):
     return ConversationHandler.END
 
 
-def send(update:Update, context: CallbackContext):
+def link_drive(update:Update, context: CallbackContext):
     bot.sendMessage(
         chat_id= update.effective_chat.id,
         text=f"<a href={link}>Click the link.</a>",
@@ -108,7 +108,9 @@ def send(update:Update, context: CallbackContext):
 
 def about(update: Update, context: CallbackContext):
     bot.sendMessage(
-
+        chat_id=update.effective_chat.id,
+        text=about_object+" "+update.effective_user.name,
+        parse_mode=ParseMode.HTML
     )
 
 
@@ -179,7 +181,8 @@ conv_handler = ConversationHandler(
 
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('update', update_json))
-dispatcher.add_handler(CommandHandler('link', send))
+dispatcher.add_handler(CommandHandler('link', link_drive))
+dispatcher.add_handler(CommandHandler('about', about))
 dispatcher.add_handler(MessageHandler(Filters.document, upload))
 dispatcher.add_handler(MessageHandler(Filters.photo, upload))
 dispatcher.add_handler(conv_handler)
