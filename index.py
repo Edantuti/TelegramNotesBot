@@ -101,7 +101,7 @@ def id_selector(update, context):
 def link_drive(update:Update, context: CallbackContext):
     bot.sendMessage(
         chat_id= update.effective_chat.id,
-        text="<a href='https://drive.google.com/drive/u/0/folders/1xWGrreIOa69FpCXl0Z4fTIJzJ3dheik-'>Click the link.</a>",
+        text="<a href='https://drive.google.com/drive/u/0/folders/1xWGrreIOa69FpCXl0Z4fTIJzJ3dheik-/'>Click the link.</a>",
         parse_mode=ParseMode.HTML
     )
 
