@@ -7,7 +7,6 @@ import time
 from datetime import date
 from drive import *
 from json import *
-link = "https://drive.google.com/drive/u/0/folders/1xWGrreIOa69FpCXl0Z4fTIJzJ3dheik-"
 
 about_object = "This bot is made by YOLO-KUN. Here is the github repo. <a href='https://github.com/Edantuti'>here</a>"
 bot = Bot(environ.get('TOKEN'))
@@ -102,7 +101,7 @@ def id_selector(update, context):
 def link_drive(update:Update, context: CallbackContext):
     bot.sendMessage(
         chat_id= update.effective_chat.id,
-        text=f"<a href={link}>Click the link.</a>",
+        text="<a href='https://drive.google.com/drive/u/0/folders/1xWGrreIOa69FpCXl0Z4fTIJzJ3dheik-'>Click the link.</a>",
         parse_mode=ParseMode.HTML
     )
 
