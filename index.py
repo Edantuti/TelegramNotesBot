@@ -109,7 +109,7 @@ def link_drive(update:Update, context: CallbackContext):
 def about(update: Update, context: CallbackContext):
     bot.sendMessage(
         chat_id=update.effective_chat.id,
-        text=about_object+" "+update.effective_user.name,
+        text=about_object,
         parse_mode=ParseMode.HTML
     )
 
