@@ -29,7 +29,7 @@ collector = {
     "Question paper": {
         "fid": ""
     },
-    "Unsorted Screenshot":{
+    "Unsorted screenshots":{
         "fid": ""
     }
 
