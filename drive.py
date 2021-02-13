@@ -29,6 +29,9 @@ collector = {
     "Question paper": {
         "fid": ""
     },
+    "Unsorted Screenshot":{
+        "fid": ""
+    }
 
 }
 list_folder = []
